@@ -6,7 +6,9 @@
   "bin": {
     "weather": "index.js"
   },
+  "type": "module",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -14,8 +16,5 @@
     "weather"
   ],
   "author": "Oleksandr Afonichev",
-  "license": "ISC",
-  "dependencies": {
-    "axios": "^1.4.0"
-  }
+  "license": "ISC"
 }
