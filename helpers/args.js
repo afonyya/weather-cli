@@ -1,10 +1,12 @@
 const getArgs = (args) => {
   const res = {};
   const [_1, _2, ...rest] = args;
+
   rest.forEach((item, index, array) => {
     if (item.charAt(0) !== '-') {
       return;
     }
+
     const key = item.substring(1);
     if (index === array.length - 1) {
       res[key] = true;
@@ -16,6 +18,7 @@ const getArgs = (args) => {
     }
     res[key] = true;
   });
+
   return res;
 };
 
