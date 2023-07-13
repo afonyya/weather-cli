@@ -1,8 +1,17 @@
 #!/usr/bin/env node
 import { getArgs } from './helpers/args.js';
 import { getWeather } from './services/api.service.js';
-import { printHelp, printSuccess, printError } from './services/log.service.js';
-import { setKeyValue, STORAGE_DICTIONARY } from './services/storage.service.js';
+import {
+  printHelp,
+  printSuccess,
+  printError,
+  printWeather,
+} from './services/log.service.js';
+import {
+  getKeyValue,
+  setKeyValue,
+  STORAGE_DICTIONARY,
+} from './services/storage.service.js';
 
 const setToken = async (token) => {
   if (!token.length) {
@@ -17,10 +26,25 @@ const setToken = async (token) => {
   }
 };
 
-const getForecast = async (city) => {
+const setCity = async (city) => {
+  if (!city.length) {
+    printError('City not passed');
+    return;
+  }
   try {
+    await setKeyValue(STORAGE_DICTIONARY.city, city);
+    printSuccess('City saved');
+  } catch (error) {
+    printError(error.message);
+  }
+};
+
+const getForecast = async () => {
+  try {
+    const city =
+      process.env.CITY ?? (await getKeyValue(STORAGE_DICTIONARY.city));
     const weather = await getWeather(city);
-    console.log(weather);
+    printWeather(weather);
   } catch (error) {
     if (error?.response?.status === 404) {
       printError('City is incorrect');
@@ -32,17 +56,18 @@ const getForecast = async (city) => {
   }
 };
 
-const initCLI = async () => {
+const init = async () => {
   const args = getArgs(process.argv);
   if (args.h) {
-    printHelp();
+    return printHelp();
   }
-  if (args.s) {
-    await getForecast(args.s);
+  if (args.c) {
+    return await setCity(args.c);
   }
   if (args.t) {
-    await setToken(args.t);
+    return await setToken(args.t);
   }
+  return getForecast();
 };
 
-initCLI();
+init();
