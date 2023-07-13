@@ -17,18 +17,32 @@ const setToken = async (token) => {
   }
 };
 
+const getForecast = async (city) => {
+  try {
+    const weather = await getWeather(city);
+    console.log(weather);
+  } catch (error) {
+    if (error?.response?.status === 404) {
+      printError('City is incorrect');
+    } else if (error?.response?.status === 401) {
+      printError('Token is incorrect');
+    } else {
+      printError(error.message);
+    }
+  }
+};
+
 const initCLI = async () => {
   const args = getArgs(process.argv);
   if (args.h) {
     printHelp();
   }
   if (args.s) {
-    // save city
+    await getForecast(args.s);
   }
   if (args.t) {
-    return await setToken(args.t);
+    await setToken(args.t);
   }
-  await getWeather('warsaw');
 };
 
 initCLI();
