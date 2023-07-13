@@ -1,11 +1,11 @@
-import { getKeyValue, STORAGE_DICTIONARY } from './storage.service.js';
 import axios from 'axios';
+import { getKeyValue, STORAGE_DICTIONARY } from './storage.service.js';
 
 const getWeather = async (city) => {
   const token =
     process.env.TOKEN ?? (await getKeyValue(STORAGE_DICTIONARY.token));
   if (!token) {
-    throw new Error('Token not set. Set it with the -t option [API_KEY]');
+    throw new Error('Set token via -t [API_KEY]');
   }
   const { data } = await axios.get(
     'https://api.openweathermap.org/data/2.5/weather',
