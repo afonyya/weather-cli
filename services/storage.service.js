@@ -32,4 +32,9 @@ const setKeyValue = async (key, value) => {
   await promises.writeFile(filePath, JSON.stringify(data));
 };
 
-export { getKeyValue, setKeyValue };
+const STORAGE_DICTIONARY = {
+  token: 'token',
+  city: 'city',
+};
+
+export { getKeyValue, setKeyValue, STORAGE_DICTIONARY };
